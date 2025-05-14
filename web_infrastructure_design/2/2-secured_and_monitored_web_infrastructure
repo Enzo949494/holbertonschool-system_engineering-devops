@@ -1,0 +1,51 @@
+![alt text](foobar2.png)
+# Secure and Monitored Three-Server Web Infrastructure for www.foobar.com
+
+## Overview
+
+This diagram represents a web infrastructure with three servers hosting **www.foobar.com**, secured by firewalls, serving encrypted HTTPS traffic, and monitored for performance and health.
+
+## Components
+
+- **User**: The client accessing the website over HTTPS.
+- **Firewalls (3 total)**:  
+  - One firewall protects the entry point before the load balancer.  
+  - One firewall protects each server, filtering traffic and blocking attacks.
+- **HAProxy Load Balancer**:  
+  - Distributes HTTPS traffic evenly to the two backend servers.  
+  - Performs SSL termination (decrypts HTTPS traffic).
+- **Servers (2 shown)** each containing:  
+  - **Nginx Web Server**: Handles HTTP requests.  
+  - **Application Server**: Runs the website’s code.  
+  - **Application Files**: The codebase.  
+  - **MySQL Database**: Primary on Server 1, Replica on Server 2.
+- **Monitoring Clients (3 total)**:  
+  - One on the load balancer and one on each server.  
+  - Collect logs and metrics (like QPS, errors) and send them to a monitoring service.
+
+## How It Works
+
+1. User connects via HTTPS, passing through the first firewall.
+2. Load balancer receives and decrypts HTTPS traffic, then forwards it securely through firewalls to backend servers.
+3. Each server processes requests via Nginx and application server, accessing its database.
+4. The primary database replicates data to the replica database.
+5. Monitoring clients collect data continuously from load balancer and servers for health and performance tracking.
+
+## Key Concepts
+
+- **Firewalls** protect the infrastructure by filtering malicious or unauthorized traffic.
+- **HTTPS** ensures encrypted communication, protecting user data and site integrity.
+- **Monitoring** helps detect issues early, analyze traffic (like QPS), and maintain uptime.
+- **SSL Termination** at load balancer decrypts traffic but exposes internal network if not secured.
+- **Primary-Replica DB** ensures data redundancy but single primary is a write bottleneck.
+- **Same components on all servers** simplify setup but can complicate scaling and security.
+
+## Known Issues
+
+- SSL termination at load balancer means internal traffic is unencrypted unless separately secured.
+- Single MySQL primary limits write availability; failure means no writes possible.
+- Having all components on each server can increase complexity and risk of inconsistent states.
+
+---
+
+This setup balances security, encryption, and monitoring but requires further improvements for full high availability and internal encryption.

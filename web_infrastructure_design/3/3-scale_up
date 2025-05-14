@@ -1,0 +1,41 @@
+![alt text](foobar_3.png)
+# Scaled-Up Web Infrastructure Design
+
+## Overview
+This diagram illustrates a scaled-up web infrastructure with component separation and high availability.
+
+## Components
+
+### Load Balancer Cluster
+- **2 HAProxy load balancers** configured in a cluster (active-passive)
+- Distributes incoming traffic and provides failover capability
+- Connected by heartbeat protocol to synchronize state
+
+### Server Components (Separated)
+1. **Web Server (Nginx/Apache)**
+   - Handles HTTP/HTTPS requests
+   - Serves static content
+   - Forward requests to application server
+
+2. **Application Server**
+   - Executes application code
+   - Processes business logic
+   - Communicates with database
+
+3. **Database Server**
+   - Stores application data
+   - Processes database queries
+
+## Benefits
+- **High Availability**: Load balancer cluster prevents single point of failure
+- **Separation of Concerns**: Each component performs specialized tasks
+- **Scalability**: Components can be scaled independently
+- **Security**: Improved with separate component boundaries
+- **Maintenance**: Components can be updated/restarted separately
+
+## Data Flow
+1. Client sends request to load balancer
+2. Active load balancer forwards request to web server
+3. Web server passes request to application server
+4. Application server processes request, queries database if needed
+5. Response follows reverse path back to client
