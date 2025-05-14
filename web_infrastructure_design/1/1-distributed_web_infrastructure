@@ -1,0 +1,41 @@
+![alt text](foobar1.png)
+# Three-Server Web Infrastructure for www.foobar.com
+
+## Overview
+
+This diagram shows a web infrastructure with three servers hosting the website **www.foobar.com**.
+
+## Components
+
+- **User**: The person accessing the website.
+- **HAProxy Load Balancer**: Distributes incoming traffic evenly between two web servers.
+- **Server 1 and Server 2**: Each contains:
+  - **Nginx Web Server**: Handles HTTP requests.
+  - **Application Server**: Runs the website’s code.
+  - **Application Files**: The codebase of the website.
+  - **MySQL Database**:
+    - Server 1 has the **Primary (Master)** database handling writes.
+    - Server 2 has the **Replica (Slave)** database receiving replicated data for reads.
+
+## How It Works
+
+1. The user requests www.foobar.com.
+2. The request goes to HAProxy, which uses a **round-robin** algorithm to send requests alternately to Server 1 or Server 2.
+3. Nginx on the chosen server receives the request and forwards it to the application server.
+4. The application server runs the code and interacts with the database.
+5. Writes go to the Primary database (Server 1).
+6. The Primary replicates data to the Replica database (Server 2).
+7. The response flows back through Nginx and HAProxy to the user.
+
+## Key Concepts
+
+- **Load Balancer**: Improves availability and distributes traffic.
+- **Active-Active Setup**: Both servers handle traffic simultaneously.
+- **Primary-Replica Database**: Primary handles writes; Replica handles read-only queries.
+- **SPOF**: The load balancer is a single point of failure.
+- **Security Issues**: No firewall or HTTPS configured.
+- **No Monitoring**: No tools to detect failures or performance issues.
+
+---
+
+This setup increases reliability and scalability compared to a single server but still has limitations to address.
